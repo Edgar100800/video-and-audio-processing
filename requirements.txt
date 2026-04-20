@@ -1,0 +1,8 @@
+opencv-python
+librosa
+numpy
+h5py
+moviepy
+torch
+torchvision
+torchaudio
