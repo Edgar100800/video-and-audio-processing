@@ -7,7 +7,7 @@ Este archivo detalla el progreso técnico del sistema, mapeando el código desar
 - [x] **Módulo 2: Extracción de Características** (100%)
 - [x] **Módulo 3: Redes de Predicción** (100%)
 - [x] **Módulo 4: Selección y Construcción** (100%)
-- [ ] **Entrenamiento y Evaluación** (En espera)
+- [x] **Entrenamiento y Evaluación** (100% - Pipeline implementado)
 
 ---
 
@@ -46,19 +46,74 @@ Este archivo detalla el progreso técnico del sistema, mapeando el código desar
     - Selección de shots mediante $AV\_Score_{s_i} \geq Score_{th}$.
     - Renderizado final MP4 usando `moviepy`.
 
+### 🔹 Módulo 5: Entrenamiento y Evaluación
+*Responsabilidad: Entrenar las redes y evaluar métricas de calidad.*
+- **`src/config.py`**: Configuración centralizada (paths, hiperparámetros, device).
+- **`src/data_loader/dataset.py`**: 
+    - PyTorch `Dataset` que carga features pre-extraídos desde archivos `.h5`.
+    - Soporta splits de entrenamiento/validación/test.
+- **`scripts/extract_features.py`**: 
+    - Extracción batch de features de videos a archivos `h5py`.
+    - Cachea ResNet50 + InceptionV3 + VGGish para evitar re-procesamiento.
+- **`scripts/train.py`**: 
+    - Bucle de entrenamiento con MSE Loss.
+    - Early stopping, LR scheduler, checkpoints (best + latest).
+- **`scripts/evaluate.py`**: 
+    - Métricas: F-score, Precision, Recall.
+    - Selección de frames top-k vs ground truth.
+    - Exporta resultados a JSON.
+
 ---
 
 ## 🛠️ Requisitos Técnicos instalados
 - **Core:** `torch`, `torchvision`, `torchaudio`.
 - **Multimedia:** `opencv-python`, `moviepy`, `librosa`.
 - **Data:** `numpy`, `h5py`.
+- **Training:** `tqdm` (para progress bars en scripts).
+
+---
+
+## 🚀 Flujo de Entrenamiento Completo
+
+### 1. Preparar Dataset
+Coloca videos en `data/raw/videos/` y anotaciones (ground truth scores) en los archivos `.h5`.
+
+### 2. Extraer Features
+```bash
+uv run python scripts/extract_features.py \
+    --input_dir data/raw/videos \
+    --output_dir data/features
+```
+
+### 3. Crear Splits
+Crear archivos de texto con IDs de videos:
+- `data/train_split.txt`
+- `data/val_split.txt`
+- `data/test_split.txt`
+
+### 4. Entrenar
+```bash
+uv run python scripts/train.py \
+    --features_dir data/features \
+    --train_split data/train_split.txt \
+    --val_split data/val_split.txt \
+    --epochs 50
+```
+
+### 5. Evaluar
+```bash
+uv run python scripts/evaluate.py \
+    --checkpoint checkpoints/best_model.pth \
+    --split data/test_split.txt \
+    --features_dir data/features
+```
 
 ---
 
 ## 🚀 Próximos Pasos (Pendientes)
-1. **`scripts/train.py`**: Implementar bucle de entrenamiento con Loss MSE.
-2. **`scripts/evaluate.py`**: Implementar F-score, Precision y Recall.
-3. **`data/raw/`**: Cargar videos del dataset TVSum/SumMe para pruebas reales.
+1. **`data/raw/`**: Cargar videos del dataset TVSum/SumMe para pruebas reales.
+2. **Integrar anotaciones**: Conectar ground truth scores de TVSum/SumMe a los archivos `.h5`.
+3. **Entrenamiento real**: Ejecutar pipeline completo con datos reales.
 
 ---
-**Última actualización:** $(date)
+**Última actualización:** 2026-04-20
