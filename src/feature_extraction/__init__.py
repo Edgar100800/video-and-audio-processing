@@ -39,7 +39,9 @@ class FeatureExtractionPipeline:
             processed_shots.append({
                 "shot_id": shot_id,
                 "visual_features": visual_features, # Shape: (N, 4096)
-                "audio_features": aligned_audio_features # Shape: (N, Dim_Audio)
+                "audio_features": aligned_audio_features, # Shape: (N, Dim_Audio)
+                "frames": frames,
+                "audio": audio
             })
 
         print("✅ Procesamiento de características finalizado.")

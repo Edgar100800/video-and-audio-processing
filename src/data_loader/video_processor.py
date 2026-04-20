@@ -2,7 +2,7 @@ import cv2
 import os
 import numpy as np
 import librosa
-from moviepy.editor import VideoFileClip
+from moviepy import VideoFileClip
 
 class VideoProcessor:
     def __init__(self, target_fps=2.0):

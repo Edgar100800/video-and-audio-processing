@@ -5,8 +5,7 @@ Basado en las Ecuaciones 1 y 2 de Gamal El-Nagar et al. (2024)
 """
 
 import numpy as np
-from moviepy.editor import ImageSequenceClip
-from moviepy.audio.AudioClip import AudioArrayClip
+from moviepy import ImageSequenceClip, AudioArrayClip
 import os
 
 class DynamicVideoSummarizer:
@@ -96,8 +95,8 @@ class DynamicVideoSummarizer:
             audio_clip = AudioArrayClip(audio_np, fps=self.audio_sr)
             
             # Recortar el audio a la duración exacta del video para evitar desincronización
-            audio_clip = audio_clip.set_duration(video_clip.duration)
-            video_clip = video_clip.set_audio(audio_clip)
+            audio_clip = audio_clip.with_duration(video_clip.duration)
+            video_clip = video_clip.with_audio(audio_clip)
 
         # 4. Exportar
         # Usamos libx264 para máxima compatibilidad MP4 y aac para audio
