@@ -26,8 +26,11 @@ cd "$SLURM_SUBMIT_DIR" || exit 1
 # Create output directories
 mkdir -p results jobs/logs
 
+# Use portable Python from project directory (compute nodes lack system Python 3.11)
+PYTHON="$SLURM_SUBMIT_DIR/.venv/bin/python"
+
 # Run evaluation using local venv (no internet needed)
-.venv/bin/python scripts/evaluate.py \
+$PYTHON scripts/evaluate.py \
     --checkpoint checkpoints/best_model.pth \
     --split data/test_split.txt \
     --features_dir data/features \

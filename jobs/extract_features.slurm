@@ -26,8 +26,11 @@ cd "$SLURM_SUBMIT_DIR" || exit 1
 # Create logs directory
 mkdir -p jobs/logs
 
+# Use portable Python from project directory (compute nodes lack system Python 3.11)
+PYTHON="$SLURM_SUBMIT_DIR/.venv/bin/python"
+
 # Run feature extraction using local venv (no internet needed)
-.venv/bin/python scripts/extract_features.py \
+$PYTHON scripts/extract_features.py \
     --input_dir data/raw/videos \
     --output_dir data/features \
     --fps 2.0 \

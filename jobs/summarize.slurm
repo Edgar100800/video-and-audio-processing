@@ -31,8 +31,11 @@ mkdir -p jobs/logs
 VIDEO_PATH="data/raw/videos/example.mp4"
 OUTPUT="results/summary_example.mp4"
 
+# Use portable Python from project directory (compute nodes lack system Python 3.11)
+PYTHON="$SLURM_SUBMIT_DIR/.venv/bin/python"
+
 # Run using local venv (no internet needed)
-.venv/bin/python main.py "$VIDEO_PATH" --output "$OUTPUT"
+$PYTHON main.py "$VIDEO_PATH" --output "$OUTPUT"
 
 echo "=========================================="
 echo "Finished at: $(date)"
