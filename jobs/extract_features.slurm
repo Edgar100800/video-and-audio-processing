@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=vasp-extract
 #SBATCH --account=tesis
-#SBATCH --partition=a-tesis
+#SBATCH --partition=standard
 #SBATCH --time=08:00:00
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=16G

@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=vasp-train
 #SBATCH --account=tesis
-#SBATCH --partition=a-tesis
+#SBATCH --partition=gpu
 #SBATCH --time=1-00:00:00
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=32G
