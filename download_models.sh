@@ -1,32 +1,26 @@
 #!/bin/bash
-# Pre-download model weights on login node (where internet works)
+# Pre-download model weights on login node using wget
 # Run once before submitting SLURM jobs
 
-echo "Pre-downloading model weights..."
+echo "Pre-downloading model weights with wget..."
 
-.venv/bin/python << 'PYEOF'
-import torch
-import torchvision.models as models
-import torch.nn as nn
+# Create cache directory
+mkdir -p ~/.cache/torch/hub/checkpoints
 
-print("Downloading ResNet50...")
-resnet = models.resnet50(weights='IMAGENET1K_V1')
-print("ResNet50 downloaded")
+cd ~/.cache/torch/hub/checkpoints
 
-print("Downloading InceptionV3...")
-inception = models.inception_v3(weights='IMAGENET1K_V1')
-print("InceptionV3 downloaded")
+# Download ResNet50 weights
+echo "Downloading ResNet50..."
+wget -c --no-check-certificate https://download.pytorch.org/models/resnet50-0676ba61.pth
 
-print("Downloading VGGish...")
-try:
-    vggish = torch.hub.load('harritaylor/torchvggish', 'vggish', verbose=False)
-    print("VGGish downloaded")
-except Exception as e:
-    print(f"VGGish download failed: {e}")
-    print("Will retry during extraction")
+# Download InceptionV3 weights
+echo "Downloading InceptionV3..."
+wget -c --no-check-certificate https://download.pytorch.org/models/inception_v3_google-0cc3c7bd.pth
 
-print("\nAll models cached to ~/.cache/torch/")
-print("Cache location:", torch.hub.get_dir())
-PYEOF
+# Download VGGish weights (from GitHub)
+echo "Downloading VGGish..."
+wget -c --no-check-certificate https://github.com/harritaylor/torchvggish/releases/download/v0.1/vggish-10086976.pth
+wget -c --no-check-certificate https://github.com/harritaylor/torchvggish/releases/download/v0.1/vggish_pca_params-970ea276.pth
 
-echo "Done! Model weights are now cached."
+echo "All models downloaded to ~/.cache/torch/hub/checkpoints/"
+ls -lh ~/.cache/torch/hub/checkpoints/
