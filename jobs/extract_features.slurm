@@ -1,10 +1,11 @@
 #!/bin/bash
 #SBATCH --job-name=vasp-extract
 #SBATCH --account=tesis
-#SBATCH --partition=standard
-#SBATCH --time=08:00:00
+#SBATCH --partition=gpu
+#SBATCH --time=04:00:00
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=16G
+#SBATCH --gres=gpu:1
 #SBATCH --output=jobs/logs/extract_%j.out
 #SBATCH --error=jobs/logs/extract_%j.err
 #SBATCH --mail-type=END,FAIL
