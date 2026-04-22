@@ -270,14 +270,19 @@ tail -f jobs/logs/train_*.out
 
 ### Job Resources
 
-Available resources per account:
+Available partitions on Khipu:
 
-| Account | CPUs | GPUs | Memory | Time Limit |
-|---------|------|------|--------|------------|
-| a-pregrado | 32 | 1 | default | 8 hours |
-| a-tesis | 32 | shard:40 | 98G | 1 day |
+| Partition | Purpose | Nodes | GPUs |
+|-----------|---------|-------|------|
+| `standard` | General CPU jobs | n[003-006] | None |
+| `big-mem` | High memory jobs | n006 | None |
+| `gpu` | GPU jobs | g[001-002], ag001 | Yes |
+| `data-science` | Data science workloads | ds001 | None |
+| `debug` | Quick tests (< 1 hour) | n[004-005] | None |
+| `debug-gpu` | GPU tests | g001 | Yes |
 
-Edit the `#SBATCH` directives in each `.slurm` file to adjust resources. For GPU training, use `--gres=gpu:1` for exclusive GPU or `--gres=shard:1` for shared GPU access.
+CPU jobs (download, extract, evaluate) use `standard` partition.
+GPU jobs (train, summarize) use `gpu` partition.
 
 ### Important Notes
 
