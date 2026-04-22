@@ -8,7 +8,7 @@
 #SBATCH --output=jobs/logs/extract_%j.out
 #SBATCH --error=jobs/logs/extract_%j.err
 #SBATCH --mail-type=END,FAIL
-#SBATCH --mail-user=sebastian.quispe@utec.edu.pe
+#SBATCH --mail-user=sebastian.quispe@khipu.utec.edu.pe
 
 # Feature Extraction Job
 # This job extracts visual and audio features from videos and saves them to h5py files.

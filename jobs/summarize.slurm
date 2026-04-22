@@ -9,7 +9,7 @@
 #SBATCH --output=jobs/logs/summary_%j.out
 #SBATCH --error=jobs/logs/summary_%j.err
 #SBATCH --mail-type=END,FAIL
-#SBATCH --mail-user=sebastian.quispe@utec.edu.pe
+#SBATCH --mail-user=sebastian.quispe@khipu.utec.edu.pe
 
 # Video Summarization Job
 # This job generates a summary video from a trained model.

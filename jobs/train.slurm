@@ -9,7 +9,7 @@
 #SBATCH --output=jobs/logs/train_%j.out
 #SBATCH --error=jobs/logs/train_%j.err
 #SBATCH --mail-type=END,FAIL
-#SBATCH --mail-user=sebastian.quispe@utec.edu.pe
+#SBATCH --mail-user=sebastian.quispe@khipu.utec.edu.pe
 
 # Training Job
 # This job trains the visual and audio ANNs.

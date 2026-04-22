@@ -8,7 +8,7 @@
 #SBATCH --output=jobs/logs/eval_%j.out
 #SBATCH --error=jobs/logs/eval_%j.err
 #SBATCH --mail-type=END,FAIL
-#SBATCH --mail-user=sebastian.quispe@utec.edu.pe
+#SBATCH --mail-user=sebastian.quispe@khipu.utec.edu.pe
 
 # Evaluation Job
 # This job evaluates a trained model on the test set.
