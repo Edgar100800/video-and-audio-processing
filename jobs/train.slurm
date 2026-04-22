@@ -25,17 +25,14 @@ echo "=========================================="
 # Verify GPU is available
 nvidia-smi
 
-# Load modules or activate environment
-export PATH="$HOME/.cargo/bin:$PATH"
-
 # Change to project directory
 cd "$SLURM_SUBMIT_DIR" || exit 1
 
 # Create output directories
 mkdir -p checkpoints results jobs/logs
 
-# Run training
-uv run python scripts/train.py \
+# Run training using local venv (no internet needed)
+.venv/bin/python scripts/train.py \
     --features_dir data/features \
     --train_split data/train_split.txt \
     --val_split data/val_split.txt \

@@ -20,23 +20,14 @@ echo "Running on host: $(hostname)"
 echo "Started at: $(date)"
 echo "=========================================="
 
-# Load modules or activate environment
-# Option 1: If using uv installed in the project
-export PATH="$HOME/.cargo/bin:$PATH"
-
-# Option 2: If using a conda environment
-# module load miniconda
-# conda activate video-summarizer
-
 # Change to project directory
 cd "$SLURM_SUBMIT_DIR" || exit 1
 
 # Create logs directory
 mkdir -p jobs/logs
 
-# Run feature extraction
-# Adjust --input_dir and --output_dir as needed
-uv run python scripts/extract_features.py \
+# Run feature extraction using local venv (no internet needed)
+.venv/bin/python scripts/extract_features.py \
     --input_dir data/raw/videos \
     --output_dir data/features \
     --fps 2.0 \

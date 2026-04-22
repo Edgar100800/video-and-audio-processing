@@ -21,9 +21,6 @@ echo "Running on host: $(hostname)"
 echo "Started at: $(date)"
 echo "=========================================="
 
-# Load modules or activate environment
-export PATH="$HOME/.cargo/bin:$PATH"
-
 # Change to project directory
 cd "$SLURM_SUBMIT_DIR" || exit 1
 
@@ -34,7 +31,8 @@ mkdir -p jobs/logs
 VIDEO_PATH="data/raw/videos/example.mp4"
 OUTPUT="results/summary_example.mp4"
 
-uv run python main.py "$VIDEO_PATH" --output "$OUTPUT"
+# Run using local venv (no internet needed)
+.venv/bin/python main.py "$VIDEO_PATH" --output "$OUTPUT"
 
 echo "=========================================="
 echo "Finished at: $(date)"

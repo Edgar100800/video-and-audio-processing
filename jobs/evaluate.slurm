@@ -20,17 +20,14 @@ echo "Running on host: $(hostname)"
 echo "Started at: $(date)"
 echo "=========================================="
 
-# Load modules or activate environment
-export PATH="$HOME/.cargo/bin:$PATH"
-
 # Change to project directory
 cd "$SLURM_SUBMIT_DIR" || exit 1
 
 # Create output directories
 mkdir -p results jobs/logs
 
-# Run evaluation
-uv run python scripts/evaluate.py \
+# Run evaluation using local venv (no internet needed)
+.venv/bin/python scripts/evaluate.py \
     --checkpoint checkpoints/best_model.pth \
     --split data/test_split.txt \
     --features_dir data/features \
