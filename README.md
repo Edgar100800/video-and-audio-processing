@@ -212,6 +212,80 @@ EARLY_STOPPING_PATIENCE = 10  # Epochs before stopping
 SUMMARY_RATIO = 0.15      # Target summary length ratio
 ```
 
+## Running on Khipu Cluster (SLURM)
+
+For large-scale training and batch processing, use the provided SLURM job scripts in `jobs/`.
+
+### Setup on Khipu
+
+1. Clone the repository and install dependencies:
+```bash
+git clone <repository-url>
+cd video-and-audio-processing
+
+# Install uv if not available
+curl -LsSf https://astral.sh/uv/install.sh | sh
+export PATH="$HOME/.cargo/bin:$PATH"
+
+# Sync dependencies
+uv sync
+```
+
+2. Prepare your data in `data/raw/videos/` and create split files.
+
+### Submitting Jobs
+
+Use `sbatch` to submit jobs to the cluster:
+
+```bash
+# 1. Feature extraction (CPU-only, 8 hours max)
+sbatch jobs/extract_features.slurm
+
+# 2. Training (GPU required, 1 day max)
+sbatch jobs/train.slurm
+
+# 3. Evaluation (CPU, 2 hours)
+sbatch jobs/evaluate.slurm
+
+# 4. Single video summarization (GPU recommended, 2 hours)
+# Edit jobs/summarize.slurm to set VIDEO_PATH and OUTPUT, then:
+sbatch jobs/summarize.slurm
+```
+
+### Monitoring Jobs
+
+```bash
+# Check job status
+squeue -u $USER
+
+# Check job details
+scontrol show job <job-id>
+
+# Cancel a job
+scancel <job-id>
+
+# View output logs
+tail -f jobs/logs/train_*.out
+```
+
+### Job Resources
+
+Available resources per account:
+
+| Account | CPUs | GPUs | Memory | Time Limit |
+|---------|------|------|--------|------------|
+| a-pregrado | 32 | 1 | default | 8 hours |
+| a-tesis | 32 | shard:40 | 98G | 1 day |
+
+Edit the `#SBATCH` directives in each `.slurm` file to adjust resources. For GPU training, use `--gres=gpu:1` for exclusive GPU or `--gres=shard:1` for shared GPU access.
+
+### Important Notes
+
+- Jobs on Khipu run non-interactively. Use `--mail-type=END,FAIL` to receive email notifications.
+- Update `--mail-user` in each `.slurm` file with your email.
+- The `uv` binary must be in your `$PATH` or loaded via module.
+- Check output logs in `jobs/logs/` for progress and errors.
+
 ## Requirements
 
 - Python 3.10+
