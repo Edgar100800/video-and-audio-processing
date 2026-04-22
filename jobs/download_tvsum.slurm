@@ -24,7 +24,7 @@ mkdir -p data/raw/tvsum data/raw/videos jobs/logs
 
 # Download TVSum dataset
 echo "Downloading TVSum dataset..."
-wget -c http://people.csail.mit.edu/yalesong/tvsum/tvsum.zip -O /tmp/tvsum.zip
+wget -c http://people.csail.mit.edu/yalesong/tvsum/tvsum50_ver_1_1.tgz -O /tmp/tvsum50_ver_1_1.tgz
 
 if [ $? -ne 0 ]; then
     echo "ERROR: Failed to download TVSum dataset"
@@ -33,17 +33,24 @@ if [ $? -ne 0 ]; then
 fi
 
 echo "Extracting TVSum dataset..."
-unzip -q /tmp/tvsum.zip -d data/raw/tvsum/
+tar -xzf /tmp/tvsum50_ver_1_1.tgz -C data/raw/tvsum/
 
 # The zip usually contains a tvsum50/ directory
 echo "Dataset extracted. Contents:"
 ls -la data/raw/tvsum/
 
-# Move videos to unified location if they exist in a subdirectory
-if [ -d "data/raw/tvsum/video" ]; then
-    mv data/raw/tvsum/video/* data/raw/videos/ 2>/dev/null
-elif [ -d "data/raw/tvsum/videos" ]; then
-    mv data/raw/tvsum/videos/* data/raw/videos/ 2>/dev/null
+# The tar extracts to tvsum50_ver_1_1/ directory
+echo "Moving videos to unified location..."
+if [ -d "data/raw/tvsum/tvsum50_ver_1_1/video" ]; then
+    mv data/raw/tvsum/tvsum50_ver_1_1/video/* data/raw/videos/ 2>/dev/null
+elif [ -d "data/raw/tvsum/tvsum50_ver_1_1/videos" ]; then
+    mv data/raw/tvsum/tvsum50_ver_1_1/videos/* data/raw/videos/ 2>/dev/null
+fi
+
+# Also copy annotations if they exist
+if [ -f "data/raw/tvsum/tvsum50_ver_1_1/ydata-tvsum50.mat" ]; then
+    cp data/raw/tvsum/tvsum50_ver_1_1/ydata-tvsum50.mat data/raw/tvsum/annotations/
+    echo "Annotations copied to data/raw/tvsum/annotations/"
 fi
 
 echo "=========================================="
