@@ -27,6 +27,9 @@ cd "$SLURM_SUBMIT_DIR" || exit 1
 # Create logs directory
 mkdir -p jobs/logs
 
+# Ensure model cache is accessible (pre-downloaded on login node)
+export TORCH_HOME="$HOME/.cache/torch"
+
 # Use portable Python from project directory (compute nodes lack system Python 3.11)
 PYTHON="$SLURM_SUBMIT_DIR/.venv/bin/python"
 
